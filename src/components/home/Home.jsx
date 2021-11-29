@@ -4,41 +4,48 @@ import React from "react";
 import "./home.css";
 import SearchBar from "../search-Bar/SearchBar";
 import { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { addToFavorites, removeSelectedFavorites } from "../../redux/actions";
 
-const mapStateToProps = (state) => ({
-  favorites: state.favoritesList.list,
-  data: state.searchResults.data,
-  isLoading: state.searchResults.isLoading,
-});
+// const mapStateToProps = (state) => ({
+//   favorites: state.favoritesList.list,
+//   data: state.searchResults.data,
+//   isLoading: state.searchResults.isLoading,
+// });
 
-const mapDispatchToProps = (dispatch) => ({
-  addItem: (itemToAdd) => {
-    dispatch(addToFavorites(itemToAdd));
-  },
-  removerAllFormFav: (itemToRemove) => {
-    dispatch(removeSelectedFavorites(itemToRemove));
-  },
-});
+// const mapDispatchToProps = (dispatch) => ({
+//   addItem: (itemToAdd) => {
+//     dispatch(addToFavorites(itemToAdd));
+//   },
+//   removerAllFormFav: (itemToRemove) => {
+//     dispatch(removeSelectedFavorites(itemToRemove));
+//   },
+// });
 
-const Home = ({ data, addItem, favorites, removerAllFormFav, isLoading }) => {
+const Home = () => {
   const [selectedArray, setSelected] = useState([]);
+
+  const { favoritesList: favorites, searchResults } = useSelector(
+    (state) => state
+  );
+
+  const dispatch = useDispatch();
 
   const SelectFavorites = (element) => {
     const { _id } = element;
-    const index = favorites.indexOf(_id);
+    const index = favorites.list.indexOf(_id);
     if (index === -1) {
-      setSelected([...favorites, element]);
-      addItem(element);
+      setSelected([...favorites.list, element]);
+
+      dispatch(addToFavorites(element));
     } else {
-      setSelected([...favorites.filter((el) => el._id !== element._id)]);
+      setSelected([...favorites.list.filter((el) => el._id !== element._id)]);
     }
   };
 
-  useEffect(() => {}, [data, selectedArray]);
+  useEffect(() => {}, [searchResults.data, selectedArray]);
 
   return (
     <div className="container h-100">
@@ -49,7 +56,7 @@ const Home = ({ data, addItem, favorites, removerAllFormFav, isLoading }) => {
         </div>
       </div>
       <SearchBar />
-      {isLoading ? (
+      {searchResults.isLoading ? (
         <div className="d-flex justify-content-center mt-5">
           <div className="mx-3">
             <Spinner animation="border" variant="danger" />
@@ -62,11 +69,11 @@ const Home = ({ data, addItem, favorites, removerAllFormFav, isLoading }) => {
             <Button className="mb-3">Check out Favorites</Button>
           </Link>
 
-          {data &&
-            data.map((result, i) => (
+          {searchResults.data &&
+            searchResults.data.map((result, i) => (
               <div
                 className={
-                  favorites.map((el) => el._id).includes(result._id)
+                  favorites.list.map((el) => el._id).includes(result._id)
                     ? "row selected-job"
                     : "row"
                 }
@@ -114,7 +121,9 @@ const Home = ({ data, addItem, favorites, removerAllFormFav, isLoading }) => {
                       <div>
                         <Button
                           variant="danger"
-                          onClick={() => removerAllFormFav(result)}
+                          onClick={() =>
+                            dispatch(removeSelectedFavorites(result))
+                          }
                         >
                           Remove
                         </Button>
@@ -130,4 +139,4 @@ const Home = ({ data, addItem, favorites, removerAllFormFav, isLoading }) => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

@@ -2,45 +2,39 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./style.css";
 import { Button } from "react-bootstrap";
-import { connect } from "react-redux";
-import {
-  removeFromFavoritesOneByOne,
-  REMOVE_ONE_BY_ONE,
-} from "../../redux/actions";
+import { useSelector, useDispatch } from "react-redux";
+import { removeOneByOneAction } from "../../redux/actions";
 
-const mapStateToProps = (state) => ({
-  favorites: state.favoritesList.list,
-});
+// const mapStateToProps = (state) => ({
+//   favorites: state.favoritesList.list,
+// });
 
 // const mapDispatchToProps = (dispatch) => ({
-//   removeOneAtTime: (itemToRemove) => {
-//     dispatch(removeFromFavoritesOneByOne(itemToRemove));
+//   removeOneAtTime: function (itemToRemove) {
+//     dispatch({
+//       type: REMOVE_ONE_BY_ONE, //this is imported form the reducer file
+//       payload: itemToRemove,
+//     });
 //   },
 // });
 
-const mapDispatchToProps = (dispatch) => ({
-  removeOneAtTime: function (itemToRemove) {
-    dispatch({
-      type: REMOVE_ONE_BY_ONE, //this is imported form the reducer file
-      payload: itemToRemove,
-    });
-  },
-});
+const Favorites = () => {
+  const favorites = useSelector((state) => state.favoritesList); // this is a hook that comes from redux and it returns a object of all defined store
+  const dispatch = useDispatch(); // with this hook we can call action function as its perimeter
 
-const Favorites = (props) => {
   return (
     <div>
       <div className="container mt-5">
         <div className="row">
           <div className="[ col-xs-12 col-sm-offset-2 col-sm-8 ]">
             <ul className="event-list">
-              {props?.favorites &&
-                props.favorites.map((company, i) => (
+              {favorites?.list &&
+                favorites.list.map((company, i) => (
                   <>
                     <div>
                       <Button
                         variant="danger"
-                        onClick={() => props.removeOneAtTime(i)}
+                        onClick={() => dispatch(removeOneByOneAction(i))}
                       >
                         Remove
                       </Button>
@@ -69,4 +63,4 @@ const Favorites = (props) => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Favorites);
+export default Favorites;

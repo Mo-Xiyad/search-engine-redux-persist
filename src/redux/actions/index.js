@@ -13,7 +13,7 @@ export const addToFavorites = (itemToAdd) => ({
 });
 
 // this reducer is used inside the "FAVORITES" Component
-export const removeFromFavoritesOneByOne = (itemToRemove) => ({
+export const removeOneByOneAction = (itemToRemove) => ({
   type: REMOVE_ONE_BY_ONE,
   payload: itemToRemove, // this is going to be the item we intend to remove to the favorite list
   // the payload is any other piece of info required by the reducer to understand
