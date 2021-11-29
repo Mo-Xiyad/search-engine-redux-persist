@@ -1,0 +1,48 @@
+.mainName {
+  margin-top: 4%;
+}
+.mainName > h1 {
+  font-weight: bolder;
+  color: #ccc;
+  font-size: 150px;
+  font-family: "Times New Roman", Times, serif;
+}
+.mainName > span {
+  font-weight: bolder;
+  color: rgb(248, 192, 192);
+  font-size: 50px;
+  font-family: monospace;
+  margin-left: 10px;
+}
+.search-result .title h3 {
+  margin: 0 0 15px;
+  color: #333;
+}
+.search-result .title p {
+  font-size: 12px;
+  color: #333;
+}
+.well {
+  border: 0;
+  padding: 20px;
+  margin-bottom: 10px;
+  min-height: 63px;
+  background: rgba(221, 238, 245, 0.459);
+  box-shadow: none;
+  border-radius: 3px;
+  position: relative;
+  max-height: 100000px;
+  border-bottom: 2px solid #ccc;
+  transition: max-height 0.5s ease;
+  -o-transition: max-height 0.5s ease;
+  -ms-transition: max-height 0.5s ease;
+  -moz-transition: max-height 0.5s ease;
+  -webkit-transition: max-height 0.5s ease;
+}
+
+.selected-job {
+  background-color: rgba(8, 238, 238, 0.123);
+  font-weight: small;
+  margin: -1px;
+  margin-bottom: 20px;
+}
