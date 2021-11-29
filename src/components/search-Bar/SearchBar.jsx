@@ -2,24 +2,15 @@ import React from "react";
 import { Button, Form } from "react-bootstrap";
 import "./search-bar.css";
 import { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { searchResultsAction } from "../../redux/actions";
 
-const mapStateToProps = (state) => ({
-  isLoading: state.searchResults.isLoading,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  performSearch: (query) => {
-    dispatch(searchResultsAction(query));
-  },
-});
-
-function SearchBar({ performSearch }) {
+function SearchBar() {
   const [query, setQuery] = useState();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    performSearch(query);
+    dispatch(searchResultsAction(query));
   }, [query]);
 
   return (
@@ -38,7 +29,7 @@ function SearchBar({ performSearch }) {
             />
             <Button
               className="search_icon d-inline"
-              onClick={() => performSearch(query)}
+              onClick={() => dispatch(searchResultsAction(query))}
             >
               <i className="fas fa-search" />
             </Button>
@@ -49,4 +40,4 @@ function SearchBar({ performSearch }) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
+export default SearchBar;
