@@ -1,0 +1,1 @@
+# search-engine-redux-persist
