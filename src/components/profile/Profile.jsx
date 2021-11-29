@@ -1,32 +1,32 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import "./profile.css";
+import Spinner from "react-bootstrap/Spinner";
+import { getCurrentCompanyJobList } from "../../redux/actions";
 
 function Profile() {
   const params = useParams();
-  const [jobs, setJobs] = useState([]);
-  const [refresh, setRefresh] = useState(false);
-
-  const getCurrentCompany = async () => {
-    const response = await fetch(
-      `https://strive-jobs-api.herokuapp.com/jobs?company=${params.company}`
-    );
-    if (response.ok) {
-      const data = await response.json();
-      setJobs(data);
-      setRefresh(true);
-    }
-  };
-  // console.log(params);
+  const { jobs, isLoading } = useSelector((state) => state.companyJobList);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getCurrentCompany();
-  }, [refresh]);
+    dispatch(getCurrentCompanyJobList(params.company));
+  }, []);
+
   return (
     <div className="container con101">
       <div className="container mt-5">
-        {jobs.data &&
+        {isLoading ? (
+          <div className="d-flex justify-content-center mt-5">
+            <div className="mx-3">
+              <Spinner animation="border" variant="danger" />
+            </div>
+            <h3>Loading...</h3>
+          </div>
+        ) : (
+          jobs.data &&
           jobs.data.map((result, i) => (
             <div className="row" key={i}>
               <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -61,7 +61,8 @@ function Profile() {
                 </div>
               </div>
             </div>
-          ))}
+          ))
+        )}
       </div>
     </div>
   );

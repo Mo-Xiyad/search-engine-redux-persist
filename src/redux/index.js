@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import searchResultsReducer from "./reducers/search";
 import favoritesListReducer from "./reducers/favorites";
+import companyJobListReducer from "./reducers/companyJobs";
 import thunk from "redux-thunk";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
@@ -18,6 +19,10 @@ export const initialState = {
   favoritesList: {
     list: [],
   },
+  companyJobList: {
+    jobs: [],
+    isLoading: true,
+  },
 };
 
 const persistConfig = {
@@ -34,6 +39,7 @@ const persistConfig = {
 const mainReducer = combineReducers({
   searchResults: searchResultsReducer,
   favoritesList: favoritesListReducer,
+  companyJobList: companyJobListReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, mainReducer);

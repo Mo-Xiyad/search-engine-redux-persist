@@ -4,6 +4,7 @@ export const REMOVE_SELECTED_FROM_FAVORITES = "REMOVE_SELECTED_FROM_FAVORITES";
 export const FETCH_DATA_FROM_API = "FETCH_DATA_FROM_API";
 export const FETCH_DATA_ERROR = "FETCH_DATA_ERROR";
 export const LOADING_DATA = "LOADING_DATA";
+export const GET_LISTED_JOBS = "GET_LISTED_JOBS";
 
 export const addToFavorites = (itemToAdd) => ({
   type: ADD_TO_FAVORITES,
@@ -68,6 +69,42 @@ export const searchResultsAction = (query = "developer", isLoading) => {
         type: FETCH_DATA_ERROR,
         payload: true,
       });
+      dispatch({
+        type: LOADING_DATA,
+        payload: false,
+      });
+    }
+  };
+};
+
+export const getCurrentCompanyJobList = (companyName) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: LOADING_DATA,
+        payload: true,
+      });
+      const response = await fetch(
+        `https://strive-jobs-api.herokuapp.com/jobs?company=${companyName}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        dispatch({
+          type: GET_LISTED_JOBS,
+          payload: data,
+        });
+        dispatch({
+          type: LOADING_DATA,
+          payload: false,
+        });
+        // setRefresh(true);
+      } else {
+        dispatch({
+          type: LOADING_DATA,
+          payload: false,
+        });
+      }
+    } catch (error) {
       dispatch({
         type: LOADING_DATA,
         payload: false,
